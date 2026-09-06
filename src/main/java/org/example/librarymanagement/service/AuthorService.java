@@ -9,6 +9,8 @@ import org.example.librarymanagement.exception.ResourceNotFoundException;
 import org.example.librarymanagement.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -76,6 +78,19 @@ public class AuthorService {
         log.debug("Retrieving all authors");
 
         return authorRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Author> getAll(Pageable pageable) {
+
+        log.debug(
+                "Retrieving authors page={}, size={}, sort={}",
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                pageable.getSort()
+        );
+
+        return authorRepository.findAll(pageable);
     }
 
     public Author update(Long id, Author updatedAuthor) {
