@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<html lang="ro"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <body>
 
@@ -14,8 +16,24 @@
         <a th:href="@{/books}">Cărți</a>
         <a th:href="@{/authors}">Autori</a>
         <a th:href="@{/categories}">Categorii</a>
-        <a th:href="@{/users}">Utilizatori</a>
+
+        <a th:href="@{/users}"
+           sec:authorize="hasRole('ADMIN')">
+            Utilizatori
+        </a>
+
         <a th:href="@{/loans}">Împrumuturi</a>
+
+        <form th:action="@{/logout}"
+              method="post"
+              style="display: inline;">
+
+            <button type="submit"
+                    class="button button-danger">
+                Logout
+            </button>
+
+        </form>
     </div>
 
 </nav>
