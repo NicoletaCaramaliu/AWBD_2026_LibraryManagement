@@ -26,7 +26,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 25px;
-    overflow: hidden;
+    overflow: visible;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.06);
 }
@@ -706,3 +706,107 @@ body:not(.home-body) .navbar {
     cursor: pointer;
 }
 
+
+
+/* BOOK DETAILS TOOLTIP */
+
+.book-title-hover {
+    position: relative;
+    display: inline-block;
+}
+
+.book-title-hover:hover {
+    z-index: 9999;
+}
+
+.book-title {
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.book-title:hover {
+    text-decoration: underline;
+}
+
+.book-details-tooltip {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 10px);
+    z-index: 9999;
+
+    width: 330px;
+    padding: 18px;
+
+    background: #1c2438;
+    border: 1px solid rgba(124, 77, 255, 0.6);
+    border-radius: 12px;
+
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-5px);
+
+    transition:
+            opacity 0.2s ease,
+            transform 0.2s ease,
+            visibility 0.2s ease;
+
+    pointer-events: none;
+}
+
+.book-title-hover:hover .book-details-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.tooltip-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    margin-bottom: 9px;
+    font-size: 14px;
+}
+
+.tooltip-row strong,
+.tooltip-description strong {
+    color: #ffffff;
+}
+
+.tooltip-row span,
+.tooltip-description span {
+    color: #c7ccda;
+}
+
+.tooltip-description {
+    margin-top: 12px;
+    padding-top: 12px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.tooltip-description strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.tooltip-description span {
+    display: block;
+    max-height: 120px;
+    overflow-y: auto;
+}
