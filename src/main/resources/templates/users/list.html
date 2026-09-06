@@ -1,22 +1,136 @@
 <!DOCTYPE html>
 <html lang="ro" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Utilizatori - Library Management</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
+
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div class="container">
 
-    <h1>Utilizatori</h1>
+    <div class="page-header">
 
-    <a th:href="@{/users/new}" class="button">
-        + Adaugă utilizator
-    </a>
+        <div>
+            <h1>Utilizatori</h1>
 
+            <p class="page-subtitle">
+                Gestionează utilizatorii bibliotecii.
+            </p>
+        </div>
+
+        <a th:href="@{/users/new}"
+           class="button">
+            + Adaugă utilizator
+        </a>
+
+    </div>
+
+    <!-- FILTRE -->
+    <form method="get"
+          th:action="@{/users}"
+          class="filter-card">
+
+        <div class="filter-group">
+
+            <label for="sortBy">
+                Sortează după:
+            </label>
+
+            <select id="sortBy"
+                    name="sortBy"
+                    class="filter-select">
+
+                <option value="id"
+                        th:selected="${sortBy == 'id'}">
+                    ID
+                </option>
+
+                <option value="username"
+                        th:selected="${sortBy == 'username'}">
+                    Username
+                </option>
+
+                <option value="email"
+                        th:selected="${sortBy == 'email'}">
+                    Email
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="filter-group">
+
+            <label for="direction">
+                Ordine:
+            </label>
+
+            <select id="direction"
+                    name="direction"
+                    class="filter-select">
+
+                <option value="asc"
+                        th:selected="${direction == 'asc'}">
+                    Crescător
+                </option>
+
+                <option value="desc"
+                        th:selected="${direction == 'desc'}">
+                    Descrescător
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="filter-group">
+
+            <label for="size">
+                Utilizatori pe pagină:
+            </label>
+
+            <select id="size"
+                    name="size"
+                    class="filter-select">
+
+                <option value="5"
+                        th:selected="${pageSize == 5}">
+                    5
+                </option>
+
+                <option value="10"
+                        th:selected="${pageSize == 10}">
+                    10
+                </option>
+
+                <option value="20"
+                        th:selected="${pageSize == 20}">
+                    20
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="filter-button-group">
+
+            <button type="submit"
+                    class="button filter-button">
+                Aplică
+            </button>
+
+        </div>
+
+    </form>
+
+    <!-- TABEL -->
     <table>
+
         <thead>
         <tr>
             <th>ID</th>
@@ -28,12 +142,16 @@
         </thead>
 
         <tbody>
+
         <tr th:each="user : ${users}">
+
             <td th:text="${user.id}"></td>
             <td th:text="${user.username}"></td>
             <td th:text="${user.email}"></td>
             <td th:text="${user.role}"></td>
+
             <td>
+
                 <a th:href="@{/users/{id}/edit(id=${user.id})}"
                    class="button">
                     Editează
@@ -42,21 +160,110 @@
                 <form th:action="@{/users/{id}/delete(id=${user.id})}"
                       method="post"
                       style="display: inline;">
+
                     <button type="submit"
                             class="button button-danger"
                             onclick="return confirm('Sigur vrei să ștergi acest utilizator?')">
                         Șterge
                     </button>
+
                 </form>
+
             </td>
+
         </tr>
+
         </tbody>
+
     </table>
 
     <p class="empty-message"
        th:if="${#lists.isEmpty(users)}">
         Nu există utilizatori înregistrați.
     </p>
+
+    <!-- INFO PAGINARE -->
+    <div class="pagination-info"
+         th:if="${userPage.totalElements > 0}">
+
+        Pagina
+        <strong th:text="${currentPage + 1}"></strong>
+
+        din
+
+        <strong th:text="${userPage.totalPages}"></strong>
+
+        <span class="pagination-separator">
+            •
+        </span>
+
+        Total utilizatori:
+
+        <strong th:text="${userPage.totalElements}"></strong>
+
+    </div>
+
+    <!-- PAGINARE -->
+    <div class="pagination"
+         th:if="${userPage.totalPages > 0}">
+
+        <a th:if="${userPage.hasPrevious()}"
+           th:href="@{/users(
+                page=${currentPage - 1},
+                size=${pageSize},
+                sortBy=${sortBy},
+                direction=${direction}
+           )}"
+           class="page-button page-navigation">
+            ← Anterior
+        </a>
+
+        <span th:unless="${userPage.hasPrevious()}"
+              class="page-button page-navigation disabled">
+            ← Anterior
+        </span>
+
+        <span th:each="pageNumber :
+                ${#numbers.sequence(
+                    0,
+                    userPage.totalPages - 1
+                )}">
+
+            <a th:if="${pageNumber != currentPage}"
+               th:href="@{/users(
+                    page=${pageNumber},
+                    size=${pageSize},
+                    sortBy=${sortBy},
+                    direction=${direction}
+               )}"
+               class="page-button"
+               th:text="${pageNumber + 1}">
+            </a>
+
+            <span th:if="${pageNumber == currentPage}"
+                  class="page-button active-page"
+                  th:text="${pageNumber + 1}">
+            </span>
+
+        </span>
+
+        <a th:if="${userPage.hasNext()}"
+           th:href="@{/users(
+                page=${currentPage + 1},
+                size=${pageSize},
+                sortBy=${sortBy},
+                direction=${direction}
+           )}"
+           class="page-button page-navigation">
+            Următor →
+        </a>
+
+        <span th:unless="${userPage.hasNext()}"
+              class="page-button page-navigation disabled">
+            Următor →
+        </span>
+
+    </div>
 
 </div>
 
