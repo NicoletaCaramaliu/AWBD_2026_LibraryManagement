@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<html lang="ro"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -24,7 +26,8 @@
         </div>
 
         <a th:href="@{/authors/new}"
-           class="button">
+           class="button"
+           sec:authorize="hasRole('ADMIN')">
             + Adaugă autor
         </a>
 
@@ -136,7 +139,10 @@
             <th>ID</th>
             <th>Prenume</th>
             <th>Nume</th>
-            <th>Acțiuni</th>
+
+            <th sec:authorize="hasRole('ADMIN')">
+                Acțiuni
+            </th>
         </tr>
         </thead>
 
@@ -150,7 +156,7 @@
 
             <td th:text="${author.lastName}"></td>
 
-            <td>
+            <td sec:authorize="hasRole('ADMIN')">
 
                 <a th:href="@{/authors/{id}/edit(id=${author.id})}"
                    class="button">
