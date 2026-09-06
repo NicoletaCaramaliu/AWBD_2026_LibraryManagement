@@ -26,15 +26,15 @@ public class AdminInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
+        log.info("ADMIN INITIALIZER IS RUNNING");
+
         if (userRepository.findByUsername("admin").isPresent()) {
-            log.debug("Admin user already exists");
+            log.info("Admin user already exists");
             return;
         }
 
         if (adminPassword == null || adminPassword.isBlank()) {
-            log.warn(
-                    "Admin user was not created because ADMIN_PASSWORD is not configured"
-            );
+            log.warn("Admin user was not created because ADMIN_PASSWORD is not configured");
             return;
         }
 
