@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Library Management</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="login-card">
+
+    <h1>LibraryManagement</h1>
+
+    <h2>Autentificare</h2>
+
+    <p>
+      Introdu datele contului pentru a continua.
+    </p>
+
+    <!-- Mesaj pentru username/parola gresita -->
+    <div class="error-message"
+         th:if="${param.error}">
+      Username sau parolă incorectă.
+    </div>
+
+    <!-- Mesaj dupa logout -->
+    <div class="success-message"
+         th:if="${param.logout}">
+      Te-ai delogat cu succes.
+    </div>
+
+    <form th:action="@{/login}"
+          method="post">
+
+      <!-- USERNAME -->
+      <div class="form-group">
+
+        <label for="username">
+          Username
+        </label>
+
+        <input type="text"
+               id="username"
+               name="username"
+               placeholder="Introdu username-ul"
+               required
+               autofocus>
+
+      </div>
+
+      <!-- PAROLA -->
+      <div class="form-group">
+
+        <label for="password">
+          Parolă
+        </label>
+
+        <input type="password"
+               id="password"
+               name="password"
+               placeholder="Introdu parola"
+               required>
+
+      </div>
+
+      <!-- REMEMBER ME -->
+      <div class="remember-me">
+
+        <input type="checkbox"
+               id="remember-me"
+               name="remember-me">
+
+        <label for="remember-me">
+          Ține-mă minte
+        </label>
+
+      </div>
+
+      <!-- LOGIN -->
+      <button type="submit"
+              class="button">
+        Autentificare
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+</body>
+</html>

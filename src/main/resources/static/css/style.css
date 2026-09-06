@@ -192,6 +192,7 @@ tr:hover {
 
 .navbar-links {
     display: flex;
+    align-items: center;
     gap: 28px;
 }
 
@@ -204,6 +205,17 @@ tr:hover {
 
 .navbar-links a:hover {
     color: #a78bfa;
+}
+
+.navbar-links form {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-links form .button {
+    margin: 0;
 }
 
 .hero {
@@ -666,3 +678,31 @@ body:not(.home-body) .navbar {
         flex-wrap: wrap;
     }
 }
+
+/* LOGIN */
+
+.login-card {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.remember-me input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.remember-me label {
+    margin: 0;
+    font-weight: bold;
+    cursor: pointer;
+}
+

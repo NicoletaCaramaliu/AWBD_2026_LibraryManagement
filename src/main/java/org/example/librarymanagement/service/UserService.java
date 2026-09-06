@@ -196,4 +196,25 @@ public class UserService {
                 id
         );
     }
+    @Transactional(readOnly = true)
+    public User getByUsername(String username) {
+
+        log.debug(
+                "Searching for user with username={}",
+                username
+        );
+
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> {
+
+                    log.error(
+                            "User with username '{}' was not found",
+                            username
+                    );
+
+                    return new ResourceNotFoundException(
+                            "User not found with username: " + username
+                    );
+                });
+    }
 }

@@ -43,36 +43,34 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http)
+            throws Exception {
 
         http
                 .authorizeHttpRequests(auth -> auth
 
-                        // resurse publice
+                        // Public
                         .requestMatchers(
+                                "/login",
                                 "/css/**",
                                 "/error"
                         ).permitAll()
 
-                        // pagina home - USER sau ADMIN
+                        // Home
                         .requestMatchers("/")
                         .hasAnyRole("USER", "ADMIN")
 
-                        // doar ADMIN gestioneaza utilizatorii
+                        // Users - doar ADMIN
                         .requestMatchers("/users/**")
                         .hasRole("ADMIN")
 
                         .requestMatchers("/api/users/**")
                         .hasRole("ADMIN")
 
-                        // endpoint pentru testarea erorii 500
                         .requestMatchers("/test-500")
                         .hasRole("ADMIN")
 
-                        // CATALOG - WEB
-
-                        // USER si ADMIN pot vedea listele
+                        // Catalog - vizualizare
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/books",
@@ -83,7 +81,7 @@ public class SecurityConfig {
                         )
                         .hasAnyRole("USER", "ADMIN")
 
-                        // ADMIN poate intra pe formularele de creare/editare
+                        // Catalog - pagini de adaugare/editare
                         .requestMatchers(
                                 "/books/new",
                                 "/books/*/edit",
@@ -98,7 +96,7 @@ public class SecurityConfig {
                         )
                         .hasRole("ADMIN")
 
-                        // orice modificare WEB pentru catalog = ADMIN
+                        // Catalog - modificari
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/books/**",
@@ -109,22 +107,14 @@ public class SecurityConfig {
                         )
                         .hasRole("ADMIN")
 
-
-                        // LOANS - WEB
-
-                        // stergerea unui imprumut doar ADMIN
-                        .requestMatchers(
-                                "/loans/*/delete"
-                        )
+                        // Loans Web
+                        .requestMatchers("/loans/*/delete")
                         .hasRole("ADMIN")
 
-                        // USER si ADMIN pot vedea/crea/returna imprumuturi
                         .requestMatchers("/loans/**")
                         .hasAnyRole("USER", "ADMIN")
 
-
-                        // REST API - READ
-
+                        // REST catalog GET
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/books/**",
@@ -135,10 +125,7 @@ public class SecurityConfig {
                         )
                         .hasAnyRole("USER", "ADMIN")
 
-
-                        // REST API - WRITE
-
-
+                        // REST catalog POST
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/books/**",
@@ -149,6 +136,7 @@ public class SecurityConfig {
                         )
                         .hasRole("ADMIN")
 
+                        // REST catalog PUT
                         .requestMatchers(
                                 HttpMethod.PUT,
                                 "/api/books/**",
@@ -159,6 +147,7 @@ public class SecurityConfig {
                         )
                         .hasRole("ADMIN")
 
+                        // REST catalog DELETE
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/books/**",
@@ -169,31 +158,29 @@ public class SecurityConfig {
                         )
                         .hasRole("ADMIN")
 
-                        // =========================
-                        // REST LOANS
-                        // =========================
-
-                        // stergere imprumut doar ADMIN
+                        // REST loans delete - doar ADMIN
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/loans/**"
                         )
                         .hasRole("ADMIN")
 
-                        // restul operatiilor pe loans
+                        // REST loans
                         .requestMatchers("/api/loans/**")
                         .hasAnyRole("USER", "ADMIN")
 
-                        // orice alt endpoint necesita autentificare
                         .anyRequest()
                         .authenticated()
                 )
 
                 .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
 
                 .logout(logout -> logout
+                        .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 )
 
