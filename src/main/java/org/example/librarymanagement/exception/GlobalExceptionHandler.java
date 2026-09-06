@@ -1,5 +1,6 @@
 package org.example.librarymanagement.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,11 +12,17 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestControllerAdvice(basePackages = "org.example.librarymanagement.controller")
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound(
             ResourceNotFoundException ex) {
+
+        log.error(
+                "Resource not found: {}",
+                ex.getMessage()
+        );
 
         return buildResponse(
                 HttpStatus.NOT_FOUND,
@@ -27,6 +34,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleDuplicate(
             DuplicateResourceException ex) {
 
+        log.error(
+                "Duplicate resource: {}",
+                ex.getMessage()
+        );
+
         return buildResponse(
                 HttpStatus.CONFLICT,
                 ex.getMessage()
@@ -36,6 +48,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidOperationException.class)
     public ResponseEntity<Map<String, Object>> handleInvalidOperation(
             InvalidOperationException ex) {
+
+        log.error(
+                "Invalid operation: {}",
+                ex.getMessage()
+        );
 
         return buildResponse(
                 HttpStatus.BAD_REQUEST,
@@ -58,6 +75,11 @@ public class GlobalExceptionHandler {
                         )
                 );
 
+        log.error(
+                "Validation failed: {}",
+                validationErrors
+        );
+
         Map<String, Object> response = new LinkedHashMap<>();
 
         response.put("timestamp", LocalDateTime.now());
@@ -73,6 +95,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneric(
             Exception ex) {
+
+        log.error(
+                "Unexpected error occurred",
+                ex
+        );
 
         return buildResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
