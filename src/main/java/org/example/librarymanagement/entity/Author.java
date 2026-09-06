@@ -3,6 +3,7 @@ package org.example.librarymanagement.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,6 +29,7 @@ public class Author {
     @Column(nullable = false)
     private String lastName;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "authors")
     @Builder.Default
     private Set<Book> books = new HashSet<>();

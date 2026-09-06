@@ -1,5 +1,6 @@
 package org.example.librarymanagement.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -40,6 +41,7 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     @Builder.Default
     private List<Loan> loans = new ArrayList<>();

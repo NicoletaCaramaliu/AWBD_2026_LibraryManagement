@@ -1,5 +1,6 @@
 package org.example.librarymanagement.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -28,6 +29,7 @@ public class Publisher {
     @Column(nullable = false)
     private String country;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "publisher")
     @Builder.Default
     private List<Book> books = new ArrayList<>();
