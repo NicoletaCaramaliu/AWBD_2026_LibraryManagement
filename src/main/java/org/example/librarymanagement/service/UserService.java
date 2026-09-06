@@ -217,4 +217,65 @@ public class UserService {
                     );
                 });
     }
+
+    public User updateWithoutPassword(
+            Long id,
+            User updatedUser) {
+
+        log.debug(
+                "Updating user without password. id={}",
+                id
+        );
+
+        User existingUser = getById(id);
+
+        userRepository.findByUsername(
+                updatedUser.getUsername()
+        ).ifPresent(user -> {
+
+            if (!user.getId().equals(id)) {
+                throw new DuplicateResourceException(
+                        "Username '" +
+                                updatedUser.getUsername() +
+                                "' already exists"
+                );
+            }
+        });
+
+        userRepository.findByEmail(
+                updatedUser.getEmail()
+        ).ifPresent(user -> {
+
+            if (!user.getId().equals(id)) {
+                throw new DuplicateResourceException(
+                        "Email '" +
+                                updatedUser.getEmail() +
+                                "' already exists"
+                );
+            }
+        });
+
+        existingUser.setUsername(
+                updatedUser.getUsername()
+        );
+
+        existingUser.setEmail(
+                updatedUser.getEmail()
+        );
+
+        existingUser.setRole(
+                updatedUser.getRole()
+        );
+
+        User savedUser =
+                userRepository.save(existingUser);
+
+        log.info(
+                "User updated successfully. id={}, username={}",
+                savedUser.getId(),
+                savedUser.getUsername()
+        );
+
+        return savedUser;
+    }
 }
