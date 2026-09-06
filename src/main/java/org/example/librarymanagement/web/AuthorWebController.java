@@ -7,10 +7,7 @@ import org.example.librarymanagement.service.AuthorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/authors")
@@ -41,6 +38,32 @@ public class AuthorWebController {
         }
 
         authorService.create(author);
+        return "redirect:/authors";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        model.addAttribute("author", authorService.getById(id));
+        return "authors/form";
+    }
+
+    @PostMapping("/{id}")
+    public String updateAuthor(
+            @PathVariable Long id,
+            @Valid @ModelAttribute("author") Author author,
+            BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "authors/form";
+        }
+
+        authorService.update(id, author);
+        return "redirect:/authors";
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deleteAuthor(@PathVariable Long id) {
+        authorService.delete(id);
         return "redirect:/authors";
     }
 }
