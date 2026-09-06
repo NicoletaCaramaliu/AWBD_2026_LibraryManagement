@@ -52,6 +52,7 @@ public class SecurityConfig {
                         // Public
                         .requestMatchers(
                                 "/login",
+                                "/register",
                                 "/css/**",
                                 "/error"
                         ).permitAll()
