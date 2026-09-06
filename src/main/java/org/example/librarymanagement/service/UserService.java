@@ -9,6 +9,8 @@ import org.example.librarymanagement.exception.ResourceNotFoundException;
 import org.example.librarymanagement.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -93,6 +95,19 @@ public class UserService {
         log.debug("Retrieving all users");
 
         return userRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<User> getAll(Pageable pageable) {
+
+        log.debug(
+                "Retrieving users page={}, size={}, sort={}",
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                pageable.getSort()
+        );
+
+        return userRepository.findAll(pageable);
     }
 
     public User update(Long id, User updatedUser) {

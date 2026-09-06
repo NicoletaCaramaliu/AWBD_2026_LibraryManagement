@@ -6,16 +6,103 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div class="container">
 
-    <h1>Cărți</h1>
+    <div class="page-header">
+        <div>
+            <h1>Cărți</h1>
+            <p class="page-subtitle">
+                Gestionează colecția de cărți din bibliotecă.
+            </p>
+        </div>
 
-    <a th:href="@{/books/new}" class="button">
-        + Adaugă carte
-    </a>
+        <a th:href="@{/books/new}" class="button">
+            + Adaugă carte
+        </a>
+    </div>
 
+    <!-- FILTRE -->
+    <form method="get"
+          th:action="@{/books}"
+          class="filter-card">
+
+        <div class="filter-group">
+            <label for="sortBy">Sortează după:</label>
+
+            <select id="sortBy"
+                    name="sortBy"
+                    class="filter-select">
+
+                <option value="title"
+                        th:selected="${sortBy == 'title'}">
+                    Titlu
+                </option>
+
+                <option value="price"
+                        th:selected="${sortBy == 'price'}">
+                    Preț
+                </option>
+
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="direction">Ordine:</label>
+
+            <select id="direction"
+                    name="direction"
+                    class="filter-select">
+
+                <option value="asc"
+                        th:selected="${direction == 'asc'}">
+                    Crescător
+                </option>
+
+                <option value="desc"
+                        th:selected="${direction == 'desc'}">
+                    Descrescător
+                </option>
+
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="size">Cărți pe pagină:</label>
+
+            <select id="size"
+                    name="size"
+                    class="filter-select">
+
+                <option value="5"
+                        th:selected="${pageSize == 5}">
+                    5
+                </option>
+
+                <option value="10"
+                        th:selected="${pageSize == 10}">
+                    10
+                </option>
+
+                <option value="20"
+                        th:selected="${pageSize == 20}">
+                    20
+                </option>
+
+            </select>
+        </div>
+
+        <div class="filter-button-group">
+            <button type="submit" class="button filter-button">
+                Aplică
+            </button>
+        </div>
+
+    </form>
+
+    <!-- TABEL -->
     <table>
         <thead>
         <tr>
@@ -37,6 +124,7 @@
             <td th:text="${book.stock}"></td>
             <td th:text="${book.publisher.name}"></td>
             <td th:text="${book.bookDetails.isbn}"></td>
+
             <td>
                 <a th:href="@{/books/{id}/edit(id=${book.id})}"
                    class="button">
@@ -46,11 +134,13 @@
                 <form th:action="@{/books/{id}/delete(id=${book.id})}"
                       method="post"
                       style="display: inline;">
+
                     <button type="submit"
                             class="button button-danger"
                             onclick="return confirm('Sigur vrei să ștergi această carte?')">
                         Șterge
                     </button>
+
                 </form>
             </td>
         </tr>
@@ -61,6 +151,80 @@
        th:if="${#lists.isEmpty(books)}">
         Nu există cărți înregistrate.
     </p>
+
+    <!-- INFO PAGINARE -->
+    <div class="pagination-info"
+         th:if="${bookPage.totalElements > 0}">
+
+        Pagina
+        <strong th:text="${currentPage + 1}"></strong>
+        din
+        <strong th:text="${bookPage.totalPages}"></strong>
+
+        <span class="pagination-separator">•</span>
+
+        Total cărți:
+        <strong th:text="${bookPage.totalElements}"></strong>
+
+    </div>
+
+    <!-- PAGINARE -->
+    <div class="pagination"
+         th:if="${bookPage.totalPages > 0}">
+
+        <a th:if="${bookPage.hasPrevious()}"
+           th:href="@{/books(
+                page=${currentPage - 1},
+                size=${pageSize},
+                sortBy=${sortBy},
+                direction=${direction}
+           )}"
+           class="page-button page-navigation">
+            ← Anterior
+        </a>
+
+        <span th:unless="${bookPage.hasPrevious()}"
+              class="page-button page-navigation disabled">
+            ← Anterior
+        </span>
+
+        <span th:each="pageNumber : ${#numbers.sequence(0, bookPage.totalPages - 1)}">
+
+            <a th:if="${pageNumber != currentPage}"
+               th:href="@{/books(
+                    page=${pageNumber},
+                    size=${pageSize},
+                    sortBy=${sortBy},
+                    direction=${direction}
+               )}"
+               class="page-button"
+               th:text="${pageNumber + 1}">
+            </a>
+
+            <span th:if="${pageNumber == currentPage}"
+                  class="page-button active-page"
+                  th:text="${pageNumber + 1}">
+            </span>
+
+        </span>
+
+        <a th:if="${bookPage.hasNext()}"
+           th:href="@{/books(
+                page=${currentPage + 1},
+                size=${pageSize},
+                sortBy=${sortBy},
+                direction=${direction}
+           )}"
+           class="page-button page-navigation">
+            Următor →
+        </a>
+
+        <span th:unless="${bookPage.hasNext()}"
+              class="page-button page-navigation disabled">
+            Următor →
+        </span>
+
+    </div>
 
 </div>
 

@@ -8,6 +8,8 @@ import org.example.librarymanagement.exception.ResourceNotFoundException;
 import org.example.librarymanagement.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -64,6 +66,19 @@ public class BookService {
         log.debug("Retrieving all books");
 
         return bookRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Book> getAll(Pageable pageable) {
+
+        log.debug(
+                "Retrieving books page={}, size={}, sort={}",
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                pageable.getSort()
+        );
+
+        return bookRepository.findAll(pageable);
     }
 
     public Book update(Long id, Book updatedBook) {
