@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<html lang="ro"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -9,10 +11,8 @@
 
 <body class="home-body">
 
-<!-- Navbar comun -->
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<!-- HERO -->
 <section class="hero">
 
     <div class="hero-content">
@@ -33,7 +33,7 @@
 
         <div class="hero-buttons">
 
-            <a th:href="@{/templates/books}" class="button">
+            <a th:href="@{/books}" class="button">
                 Vezi cărțile
             </a>
 
@@ -77,7 +77,6 @@
 
 </section>
 
-<!-- ADMINISTRARE -->
 <section class="management-section">
 
     <div class="section-heading">
@@ -94,8 +93,7 @@
 
     <div class="management-grid">
 
-        <!-- CĂRȚI -->
-        <a th:href="@{/templates/books}" class="management-card">
+        <a th:href="@{/books}" class="management-card">
 
             <div class="management-icon">
                 📖
@@ -104,7 +102,7 @@
             <h3>Cărți</h3>
 
             <p>
-                Adaugă, modifică și gestionează cărțile.
+                Vezi și gestionează cărțile bibliotecii.
             </p>
 
             <span class="card-link">
@@ -113,8 +111,7 @@
 
         </a>
 
-        <!-- AUTORI -->
-        <a th:href="@{/templates/authors}" class="management-card">
+        <a th:href="@{/authors}" class="management-card">
 
             <div class="management-icon">
                 ✍
@@ -123,7 +120,7 @@
             <h3>Autori</h3>
 
             <p>
-                Gestionează autorii disponibili.
+                Vezi și gestionează autorii disponibili.
             </p>
 
             <span class="card-link">
@@ -132,8 +129,7 @@
 
         </a>
 
-        <!-- CATEGORII -->
-        <a th:href="@{/templates/categories}" class="management-card">
+        <a th:href="@{/categories}" class="management-card">
 
             <div class="management-icon">
                 🏷
@@ -151,8 +147,7 @@
 
         </a>
 
-        <!-- EDITURI -->
-        <a th:href="@{/templates/publishers}" class="management-card">
+        <a th:href="@{/publishers}" class="management-card">
 
             <div class="management-icon">
                 🏢
@@ -161,7 +156,7 @@
             <h3>Edituri</h3>
 
             <p>
-                Administrează editurile cărților.
+                Vezi și gestionează editurile.
             </p>
 
             <span class="card-link">
@@ -170,8 +165,7 @@
 
         </a>
 
-        <!-- DETALII CĂRȚI -->
-        <a th:href="@{/templates/book-details}" class="management-card">
+        <a th:href="@{/book-details}" class="management-card">
 
             <div class="management-icon">
                 📋
@@ -189,8 +183,9 @@
 
         </a>
 
-        <!-- UTILIZATORI -->
-        <a th:href="@{/templates/users}" class="management-card">
+        <a th:href="@{/users}"
+           class="management-card"
+           sec:authorize="hasRole('ADMIN')">
 
             <div class="management-icon">
                 👤
@@ -208,8 +203,7 @@
 
         </a>
 
-        <!-- ÎMPRUMUTURI -->
-        <a th:href="@{/templates/loans}" class="management-card">
+        <a th:href="@{/loans}" class="management-card">
 
             <div class="management-icon">
                 ↔
