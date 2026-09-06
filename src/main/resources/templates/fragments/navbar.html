@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<nav class="navbar" th:fragment="navbar">
+
+    <a th:href="@{/}" class="navbar-brand">
+        LibraryManagement
+    </a>
+
+    <div class="navbar-links">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/books}">Cărți</a>
+        <a th:href="@{/authors}">Autori</a>
+        <a th:href="@{/categories}">Categorii</a>
+        <a th:href="@{/users}">Utilizatori</a>
+        <a th:href="@{/loans}">Împrumuturi</a>
+    </div>
+
+</nav>
+
+</body>
+</html>
