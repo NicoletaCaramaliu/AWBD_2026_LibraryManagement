@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Adaugă împrumut - Library Management</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Adaugă împrumut</h1>
+
+    <form th:action="@{/loans}" method="post">
+
+        <div class="form-group">
+            <label for="userId">Utilizator</label>
+
+            <select id="userId"
+                    name="userId"
+                    required>
+
+                <option value="">-- Selectează utilizatorul --</option>
+
+                <option th:each="user : ${users}"
+                        th:value="${user.id}"
+                        th:text="${user.username + ' - ' + user.email}">
+                </option>
+
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="bookId">Carte</label>
+
+            <select id="bookId"
+                    name="bookId"
+                    required>
+
+                <option value="">-- Selectează cartea --</option>
+
+                <option th:each="book : ${books}"
+                        th:value="${book.id}"
+                        th:text="${book.title + ' (stoc: ' + book.stock + ')'}">
+                </option>
+
+            </select>
+        </div>
+
+        <button type="submit" class="button">
+            Creează împrumut
+        </button>
+
+        <a th:href="@{/loans}"
+           class="button button-secondary">
+            Anulează
+        </a>
+
+    </form>
+
+</div>
+
+</body>
+</html>
