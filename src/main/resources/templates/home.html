@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Library Management</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="home-body">
+
+<!-- Navbar comun -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- HERO -->
+<section class="hero">
+
+    <div class="hero-content">
+
+        <span class="hero-badge">
+            Library Management System
+        </span>
+
+        <h1>
+            Gestionează biblioteca
+            <span>simplu și rapid.</span>
+        </h1>
+
+        <p>
+            Administrează cărțile, autorii, utilizatorii și împrumuturile
+            dintr-un singur loc.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a th:href="@{/books}" class="button">
+                Vezi cărțile
+            </a>
+
+            <a th:href="@{/loans/new}" class="button button-secondary">
+                Creează împrumut
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="hero-visual">
+
+        <div class="visual-card visual-card-main">
+
+            <div class="book-icon">
+                📚
+            </div>
+
+            <h2>Biblioteca ta</h2>
+
+            <p>
+                Organizată într-o singură aplicație
+            </p>
+
+        </div>
+
+        <div class="floating-card floating-one">
+            Cărți
+        </div>
+
+        <div class="floating-card floating-two">
+            Autori
+        </div>
+
+        <div class="floating-card floating-three">
+            Împrumuturi
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ADMINISTRARE -->
+<section class="management-section">
+
+    <div class="section-heading">
+
+        <span>Administrare</span>
+
+        <h2>Ce vrei să gestionezi?</h2>
+
+        <p>
+            Alege una dintre secțiunile aplicației.
+        </p>
+
+    </div>
+
+    <div class="management-grid">
+
+        <!-- CĂRȚI -->
+        <a th:href="@{/books}" class="management-card">
+
+            <div class="management-icon">
+                📖
+            </div>
+
+            <h3>Cărți</h3>
+
+            <p>
+                Adaugă, modifică și gestionează cărțile.
+            </p>
+
+            <span class="card-link">
+                Deschide →
+            </span>
+
+        </a>
+
+        <!-- AUTORI -->
+        <a th:href="@{/authors}" class="management-card">
+
+            <div class="management-icon">
+                ✍
+            </div>
+
+            <h3>Autori</h3>
+
+            <p>
+                Gestionează autorii disponibili.
+            </p>
+
+            <span class="card-link">
+                Deschide →
+            </span>
+
+        </a>
+
+        <!-- CATEGORII -->
+        <a th:href="@{/categories}" class="management-card">
+
+            <div class="management-icon">
+                🏷
+            </div>
+
+            <h3>Categorii</h3>
+
+            <p>
+                Organizează cărțile pe categorii.
+            </p>
+
+            <span class="card-link">
+                Deschide →
+            </span>
+
+        </a>
+
+        <!-- EDITURI -->
+        <a th:href="@{/publishers}" class="management-card">
+
+            <div class="management-icon">
+                🏢
+            </div>
+
+            <h3>Edituri</h3>
+
+            <p>
+                Administrează editurile cărților.
+            </p>
+
+            <span class="card-link">
+                Deschide →
+            </span>
+
+        </a>
+
+        <!-- DETALII CĂRȚI -->
+        <a th:href="@{/book-details}" class="management-card">
+
+            <div class="management-icon">
+                📋
+            </div>
+
+            <h3>Detalii cărți</h3>
+
+            <p>
+                ISBN, limbă, pagini și anul publicării.
+            </p>
+
+            <span class="card-link">
+                Deschide →
+            </span>
+
+        </a>
+
+        <!-- UTILIZATORI -->
+        <a th:href="@{/users}" class="management-card">
+
+            <div class="management-icon">
+                👤
+            </div>
+
+            <h3>Utilizatori</h3>
+
+            <p>
+                Gestionează utilizatorii bibliotecii.
+            </p>
+
+            <span class="card-link">
+                Deschide →
+            </span>
+
+        </a>
+
+        <!-- ÎMPRUMUTURI -->
+        <a th:href="@{/loans}" class="management-card">
+
+            <div class="management-icon">
+                ↔
+            </div>
+
+            <h3>Împrumuturi</h3>
+
+            <p>
+                Vezi împrumuturile active și returnate.
+            </p>
+
+            <span class="card-link">
+                Deschide →
+            </span>
+
+        </a>
+
+    </div>
+
+</section>
+
+<footer class="home-footer">
+    Library Management
+</footer>
+
+</body>
+
+</html>

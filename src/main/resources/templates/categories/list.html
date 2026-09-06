@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Categorii - Library Management</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="container">
+
+    <h1>Categorii</h1>
+
+    <a th:href="@{/categories/new}" class="button">
+        + Adaugă categorie
+    </a>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nume</th>
+            <th>Descriere</th>
+            <th>Acțiuni</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="category : ${categories}">
+            <td th:text="${category.id}"></td>
+            <td th:text="${category.name}"></td>
+            <td th:text="${category.description}"></td>
+            <td>
+                <a th:href="@{/categories/{id}/edit(id=${category.id})}"
+                   class="button">
+                    Editează
+                </a>
+
+                <form th:action="@{/categories/{id}/delete(id=${category.id})}"
+                      method="post"
+                      style="display: inline;">
+                    <button type="submit"
+                            class="button button-danger"
+                            onclick="return confirm('Sigur vrei să ștergi această categorie?')">
+                        Șterge
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p class="empty-message"
+       th:if="${#lists.isEmpty(categories)}">
+        Nu există categorii înregistrate.
+    </p>
+
+</div>
+
+</body>
+</html>

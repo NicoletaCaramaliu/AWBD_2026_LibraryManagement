@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cărți - Library Management</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+
+    <h1>Cărți</h1>
+
+    <a th:href="@{/books/new}" class="button">
+        + Adaugă carte
+    </a>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Titlu</th>
+            <th>Preț</th>
+            <th>Stoc</th>
+            <th>Editură</th>
+            <th>ISBN</th>
+            <th>Acțiuni</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.id}"></td>
+            <td th:text="${book.title}"></td>
+            <td th:text="${book.price}"></td>
+            <td th:text="${book.stock}"></td>
+            <td th:text="${book.publisher.name}"></td>
+            <td th:text="${book.bookDetails.isbn}"></td>
+            <td>
+                <a th:href="@{/books/{id}/edit(id=${book.id})}"
+                   class="button">
+                    Editează
+                </a>
+
+                <form th:action="@{/books/{id}/delete(id=${book.id})}"
+                      method="post"
+                      style="display: inline;">
+                    <button type="submit"
+                            class="button button-danger"
+                            onclick="return confirm('Sigur vrei să ștergi această carte?')">
+                        Șterge
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p class="empty-message"
+       th:if="${#lists.isEmpty(books)}">
+        Nu există cărți înregistrate.
+    </p>
+
+</div>
+
+</body>
+</html>

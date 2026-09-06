@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Utilizatori - Library Management</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+
+    <h1>Utilizatori</h1>
+
+    <a th:href="@{/users/new}" class="button">
+        + Adaugă utilizator
+    </a>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Acțiuni</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.role}"></td>
+            <td>
+                <a th:href="@{/users/{id}/edit(id=${user.id})}"
+                   class="button">
+                    Editează
+                </a>
+
+                <form th:action="@{/users/{id}/delete(id=${user.id})}"
+                      method="post"
+                      style="display: inline;">
+                    <button type="submit"
+                            class="button button-danger"
+                            onclick="return confirm('Sigur vrei să ștergi acest utilizator?')">
+                        Șterge
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p class="empty-message"
+       th:if="${#lists.isEmpty(users)}">
+        Nu există utilizatori înregistrați.
+    </p>
+
+</div>
+
+</body>
+</html>

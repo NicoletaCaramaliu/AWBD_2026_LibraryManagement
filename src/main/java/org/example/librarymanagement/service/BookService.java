@@ -21,6 +21,7 @@ public class BookService {
     private final PublisherRepository publisherRepository;
     private final AuthorRepository authorRepository;
     private final CategoryRepository categoryRepository;
+    private final BookDetailsRepository bookDetailsRepository;
 
     public Book create(Book book) {
 
@@ -78,6 +79,25 @@ public class BookService {
     }
 
     private void validateAndAttachRelations(Book book) {
+
+        if (book.getBookDetails() != null &&
+                book.getBookDetails().getId() != null) {
+
+            Long bookDetailsId = book.getBookDetails().getId();
+
+            BookDetails bookDetails =
+                    bookDetailsRepository
+                            .findById(bookDetailsId)
+                            .orElseThrow(() ->
+                                    new ResourceNotFoundException(
+                                            "BookDetails with id " +
+                                                    bookDetailsId +
+                                                    " was not found"
+                                    )
+                            );
+
+            book.setBookDetails(bookDetails);
+        }
 
         if (book.getPublisher() != null &&
                 book.getPublisher().getId() != null) {

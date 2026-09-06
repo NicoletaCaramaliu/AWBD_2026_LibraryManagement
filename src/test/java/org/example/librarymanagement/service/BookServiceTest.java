@@ -4,6 +4,7 @@ import org.example.librarymanagement.entity.*;
 import org.example.librarymanagement.exception.InvalidOperationException;
 import org.example.librarymanagement.exception.ResourceNotFoundException;
 import org.example.librarymanagement.repository.AuthorRepository;
+import org.example.librarymanagement.repository.BookDetailsRepository;
 import org.example.librarymanagement.repository.BookRepository;
 import org.example.librarymanagement.repository.CategoryRepository;
 import org.example.librarymanagement.repository.PublisherRepository;
@@ -38,6 +39,9 @@ class BookServiceTest {
 
     @Mock
     private CategoryRepository categoryRepository;
+
+    @Mock
+    private BookDetailsRepository bookDetailsRepository;
 
     @InjectMocks
     private BookService bookService;
@@ -103,6 +107,9 @@ class BookServiceTest {
         when(categoryRepository.findById(1L))
                 .thenReturn(Optional.of(category));
 
+        when(bookDetailsRepository.findById(1L))
+                .thenReturn(Optional.of(bookDetails));
+
         when(bookRepository.save(book))
                 .thenReturn(book);
 
@@ -115,17 +122,22 @@ class BookServiceTest {
         assertEquals(5, result.getStock());
 
         assertEquals(publisher, result.getPublisher());
+        assertEquals(bookDetails, result.getBookDetails());
         assertTrue(result.getAuthors().contains(author));
         assertTrue(result.getCategories().contains(category));
 
         verify(publisherRepository).findById(1L);
         verify(authorRepository).findById(1L);
         verify(categoryRepository).findById(1L);
+        verify(bookDetailsRepository).findById(1L);
         verify(bookRepository).save(book);
     }
 
     @Test
     void create_shouldThrowException_whenPublisherDoesNotExist() {
+
+        when(bookDetailsRepository.findById(1L))
+                .thenReturn(Optional.of(bookDetails));
 
         when(publisherRepository.findById(1L))
                 .thenReturn(Optional.empty());
@@ -146,6 +158,9 @@ class BookServiceTest {
 
     @Test
     void create_shouldThrowException_whenAuthorDoesNotExist() {
+
+        when(bookDetailsRepository.findById(1L))
+                .thenReturn(Optional.of(bookDetails));
 
         when(publisherRepository.findById(1L))
                 .thenReturn(Optional.of(publisher));
@@ -177,6 +192,9 @@ class BookServiceTest {
 
         book.setAuthors(Set.of(authorWithoutId));
 
+        when(bookDetailsRepository.findById(1L))
+                .thenReturn(Optional.of(bookDetails));
+
         when(publisherRepository.findById(1L))
                 .thenReturn(Optional.of(publisher));
 
@@ -196,6 +214,9 @@ class BookServiceTest {
 
     @Test
     void create_shouldThrowException_whenCategoryDoesNotExist() {
+
+        when(bookDetailsRepository.findById(1L))
+                .thenReturn(Optional.of(bookDetails));
 
         when(publisherRepository.findById(1L))
                 .thenReturn(Optional.of(publisher));
@@ -229,6 +250,9 @@ class BookServiceTest {
                 .build();
 
         book.setCategories(Set.of(categoryWithoutId));
+
+        when(bookDetailsRepository.findById(1L))
+                .thenReturn(Optional.of(bookDetails));
 
         when(publisherRepository.findById(1L))
                 .thenReturn(Optional.of(publisher));
@@ -321,6 +345,9 @@ class BookServiceTest {
 
         when(bookRepository.findById(1L))
                 .thenReturn(Optional.of(book));
+
+        when(bookDetailsRepository.findById(1L))
+                .thenReturn(Optional.of(bookDetails));
 
         when(publisherRepository.findById(1L))
                 .thenReturn(Optional.of(publisher));

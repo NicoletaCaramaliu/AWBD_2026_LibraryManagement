@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edituri - Library Management</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="container">
+
+    <h1>Edituri</h1>
+
+    <a th:href="@{/publishers/new}" class="button">
+        + Adaugă editură
+    </a>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nume</th>
+            <th>Țară</th>
+            <th>Acțiuni</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="publisher : ${publishers}">
+            <td th:text="${publisher.id}"></td>
+            <td th:text="${publisher.name}"></td>
+            <td th:text="${publisher.country}"></td>
+            <td>
+                <a th:href="@{/publishers/{id}/edit(id=${publisher.id})}"
+                   class="button">
+                    Editează
+                </a>
+
+                <form th:action="@{/publishers/{id}/delete(id=${publisher.id})}"
+                      method="post"
+                      style="display: inline;">
+                    <button type="submit"
+                            class="button button-danger"
+                            onclick="return confirm('Sigur vrei să ștergi această editură?')">
+                        Șterge
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p class="empty-message"
+       th:if="${#lists.isEmpty(publishers)}">
+        Nu există edituri înregistrate.
+    </p>
+
+</div>
+
+</body>
+</html>

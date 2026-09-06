@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${bookDetails.id == null ? 'Adaugă detalii carte' : 'Editează detalii carte'}">
+        Detalii carte
+    </title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+
+    <h1 th:text="${bookDetails.id == null ? 'Adaugă detalii carte' : 'Editează detalii carte'}">
+        Detalii carte
+    </h1>
+
+    <!-- CREATE -->
+    <form th:if="${bookDetails.id == null}"
+          th:action="@{/book-details}"
+          th:object="${bookDetails}"
+          method="post">
+
+        <div class="form-group">
+            <label for="isbnCreate">ISBN</label>
+
+            <input type="text"
+                   id="isbnCreate"
+                   th:field="*{isbn}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('isbn')}"
+               th:errors="*{isbn}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="pagesCreate">Număr pagini</label>
+
+            <input type="number"
+                   id="pagesCreate"
+                   th:field="*{numberOfPages}"
+                   min="1"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('numberOfPages')}"
+               th:errors="*{numberOfPages}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="languageCreate">Limbă</label>
+
+            <input type="text"
+                   id="languageCreate"
+                   th:field="*{language}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('language')}"
+               th:errors="*{language}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="yearCreate">An publicare</label>
+
+            <input type="number"
+                   id="yearCreate"
+                   th:field="*{publicationYear}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('publicationYear')}"
+               th:errors="*{publicationYear}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="descriptionCreate">Descriere</label>
+
+            <input type="text"
+                   id="descriptionCreate"
+                   th:field="*{description}">
+        </div>
+
+        <button type="submit" class="button">
+            Salvează
+        </button>
+
+        <a th:href="@{/book-details}"
+           class="button button-secondary">
+            Anulează
+        </a>
+
+    </form>
+
+    <!-- EDIT -->
+    <form th:unless="${bookDetails.id == null}"
+          th:action="@{/book-details/{id}(id=${bookDetails.id})}"
+          th:object="${bookDetails}"
+          method="post">
+
+        <div class="form-group">
+            <label for="isbnEdit">ISBN</label>
+
+            <input type="text"
+                   id="isbnEdit"
+                   th:field="*{isbn}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('isbn')}"
+               th:errors="*{isbn}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="pagesEdit">Număr pagini</label>
+
+            <input type="number"
+                   id="pagesEdit"
+                   th:field="*{numberOfPages}"
+                   min="1"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('numberOfPages')}"
+               th:errors="*{numberOfPages}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="languageEdit">Limbă</label>
+
+            <input type="text"
+                   id="languageEdit"
+                   th:field="*{language}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('language')}"
+               th:errors="*{language}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="yearEdit">An publicare</label>
+
+            <input type="number"
+                   id="yearEdit"
+                   th:field="*{publicationYear}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('publicationYear')}"
+               th:errors="*{publicationYear}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="descriptionEdit">Descriere</label>
+
+            <input type="text"
+                   id="descriptionEdit"
+                   th:field="*{description}">
+        </div>
+
+        <button type="submit" class="button">
+            Salvează modificările
+        </button>
+
+        <a th:href="@{/book-details}"
+           class="button button-secondary">
+            Anulează
+        </a>
+
+    </form>
+
+</div>
+
+</body>
+</html>
