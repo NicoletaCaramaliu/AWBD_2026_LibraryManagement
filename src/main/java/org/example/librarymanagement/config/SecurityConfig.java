@@ -33,7 +33,7 @@ public class SecurityConfig {
 
         userDetailsManager.setAuthoritiesByUsernameQuery(
                 """
-                SELECT username, CONCAT('ROLE_', role)
+                SELECT username, CONCAT('ROLE_', UPPER(role))
                 FROM users
                 WHERE username = ?
                 """
