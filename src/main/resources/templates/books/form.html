@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="ro" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
+
     <title th:text="${book.id == null ? 'Adaugă carte' : 'Editează carte'}">
         Carte
     </title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
@@ -88,23 +91,71 @@
             </select>
         </div>
 
+        <h2>Detalii carte</h2>
+
         <div class="form-group">
-            <label for="bookDetailsCreate">Detalii carte</label>
+            <label for="isbnCreate">ISBN</label>
 
-            <select id="bookDetailsCreate"
-                    th:field="*{bookDetails.id}"
-                    required>
+            <input type="text"
+                   id="isbnCreate"
+                   th:field="*{bookDetails.isbn}"
+                   required>
 
-                <option value="">
-                    -- Selectează detaliile --
-                </option>
+            <p class="error-message"
+               th:if="${#fields.hasErrors('bookDetails.isbn')}"
+               th:errors="*{bookDetails.isbn}">
+            </p>
+        </div>
 
-                <option th:each="details : ${bookDetailsList}"
-                        th:value="${details.id}"
-                        th:text="${details.isbn}">
-                </option>
+        <div class="form-group">
+            <label for="pagesCreate">Număr pagini</label>
 
-            </select>
+            <input type="number"
+                   id="pagesCreate"
+                   th:field="*{bookDetails.numberOfPages}"
+                   min="1"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('bookDetails.numberOfPages')}"
+               th:errors="*{bookDetails.numberOfPages}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="languageCreate">Limbă</label>
+
+            <input type="text"
+                   id="languageCreate"
+                   th:field="*{bookDetails.language}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('bookDetails.language')}"
+               th:errors="*{bookDetails.language}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="yearCreate">An publicare</label>
+
+            <input type="number"
+                   id="yearCreate"
+                   th:field="*{bookDetails.publicationYear}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('bookDetails.publicationYear')}"
+               th:errors="*{bookDetails.publicationYear}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="descriptionCreate">Descriere</label>
+
+            <input type="text"
+                   id="descriptionCreate"
+                   th:field="*{bookDetails.description}">
         </div>
 
         <div class="form-group">
@@ -218,23 +269,71 @@
             </select>
         </div>
 
+        <h2>Detalii carte</h2>
+
         <div class="form-group">
-            <label for="bookDetailsEdit">Detalii carte</label>
+            <label for="isbnEdit">ISBN</label>
 
-            <select id="bookDetailsEdit"
-                    th:field="*{bookDetails.id}"
-                    required>
+            <input type="text"
+                   id="isbnEdit"
+                   th:field="*{bookDetails.isbn}"
+                   required>
 
-                <option value="">
-                    -- Selectează detaliile --
-                </option>
+            <p class="error-message"
+               th:if="${#fields.hasErrors('bookDetails.isbn')}"
+               th:errors="*{bookDetails.isbn}">
+            </p>
+        </div>
 
-                <option th:each="details : ${bookDetailsList}"
-                        th:value="${details.id}"
-                        th:text="${details.isbn}">
-                </option>
+        <div class="form-group">
+            <label for="pagesEdit">Număr pagini</label>
 
-            </select>
+            <input type="number"
+                   id="pagesEdit"
+                   th:field="*{bookDetails.numberOfPages}"
+                   min="1"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('bookDetails.numberOfPages')}"
+               th:errors="*{bookDetails.numberOfPages}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="languageEdit">Limbă</label>
+
+            <input type="text"
+                   id="languageEdit"
+                   th:field="*{bookDetails.language}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('bookDetails.language')}"
+               th:errors="*{bookDetails.language}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="yearEdit">An publicare</label>
+
+            <input type="number"
+                   id="yearEdit"
+                   th:field="*{bookDetails.publicationYear}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('bookDetails.publicationYear')}"
+               th:errors="*{bookDetails.publicationYear}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="descriptionEdit">Descriere</label>
+
+            <input type="text"
+                   id="descriptionEdit"
+                   th:field="*{bookDetails.description}">
         </div>
 
         <div class="form-group">
@@ -246,7 +345,8 @@
 
                 <option th:each="author : ${authors}"
                         th:value="${author.id}"
-                        th:text="${author.firstName + ' ' + author.lastName}">
+                        th:text="${author.firstName + ' ' + author.lastName}"
+                        th:selected="${book.authors != null and book.authors.contains(author)}">
                 </option>
 
             </select>
@@ -261,7 +361,8 @@
 
                 <option th:each="category : ${categories}"
                         th:value="${category.id}"
-                        th:text="${category.name}">
+                        th:text="${category.name}"
+                        th:selected="${book.categories != null and book.categories.contains(category)}">
                 </option>
 
             </select>

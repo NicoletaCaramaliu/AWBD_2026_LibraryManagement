@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,9 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UserService userService;
@@ -53,6 +57,9 @@ class UserServiceTest {
         when(userRepository.findByEmail("john@example.com"))
                 .thenReturn(Optional.empty());
 
+        when(passwordEncoder.encode("password123"))
+                .thenReturn("encodedPassword");
+
         when(userRepository.save(user))
                 .thenReturn(user);
 
@@ -62,10 +69,12 @@ class UserServiceTest {
         assertEquals(1L, result.getId());
         assertEquals("john", result.getUsername());
         assertEquals("john@example.com", result.getEmail());
+        assertEquals("encodedPassword", result.getPassword());
         assertEquals(Role.USER, result.getRole());
 
         verify(userRepository).findByUsername("john");
         verify(userRepository).findByEmail("john@example.com");
+        verify(passwordEncoder).encode("password123");
         verify(userRepository).save(user);
     }
 
@@ -87,6 +96,9 @@ class UserServiceTest {
 
         verify(userRepository, never())
                 .findByEmail(anyString());
+
+        verify(passwordEncoder, never())
+                .encode(anyString());
 
         verify(userRepository, never())
                 .save(any(User.class));
@@ -110,6 +122,9 @@ class UserServiceTest {
                 "Email 'john@example.com' already exists",
                 exception.getMessage()
         );
+
+        verify(passwordEncoder, never())
+                .encode(anyString());
 
         verify(userRepository, never())
                 .save(any(User.class));
@@ -193,6 +208,9 @@ class UserServiceTest {
         when(userRepository.findByEmail("john.updated@example.com"))
                 .thenReturn(Optional.empty());
 
+        when(passwordEncoder.encode("newPassword"))
+                .thenReturn("encodedNewPassword");
+
         when(userRepository.save(user))
                 .thenReturn(user);
 
@@ -200,9 +218,10 @@ class UserServiceTest {
 
         assertEquals("john_updated", result.getUsername());
         assertEquals("john.updated@example.com", result.getEmail());
-        assertEquals("newPassword", result.getPassword());
+        assertEquals("encodedNewPassword", result.getPassword());
         assertEquals(Role.ADMIN, result.getRole());
 
+        verify(passwordEncoder).encode("newPassword");
         verify(userRepository).save(user);
     }
 
@@ -239,6 +258,9 @@ class UserServiceTest {
                 "Another user already uses this username",
                 exception.getMessage()
         );
+
+        verify(passwordEncoder, never())
+                .encode(anyString());
 
         verify(userRepository, never())
                 .save(any(User.class));
@@ -281,8 +303,46 @@ class UserServiceTest {
                 exception.getMessage()
         );
 
+        verify(passwordEncoder, never())
+                .encode(anyString());
+
         verify(userRepository, never())
                 .save(any(User.class));
+    }
+
+    @Test
+    void updateWithoutPassword_shouldKeepExistingPassword() {
+
+        User updatedUser = User.builder()
+                .username("john_updated")
+                .email("john.updated@example.com")
+                .role(Role.ADMIN)
+                .build();
+
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.of(user));
+
+        when(userRepository.findByUsername("john_updated"))
+                .thenReturn(Optional.empty());
+
+        when(userRepository.findByEmail("john.updated@example.com"))
+                .thenReturn(Optional.empty());
+
+        when(userRepository.save(user))
+                .thenReturn(user);
+
+        User result =
+                userService.updateWithoutPassword(1L, updatedUser);
+
+        assertEquals("john_updated", result.getUsername());
+        assertEquals("john.updated@example.com", result.getEmail());
+        assertEquals("password123", result.getPassword());
+        assertEquals(Role.ADMIN, result.getRole());
+
+        verify(passwordEncoder, never())
+                .encode(anyString());
+
+        verify(userRepository).save(user);
     }
 
     @Test

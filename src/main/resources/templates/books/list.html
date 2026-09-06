@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<html lang="ro"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <title>Cărți - Library Management</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
@@ -19,7 +23,9 @@
             </p>
         </div>
 
-        <a th:href="@{/books/new}" class="button">
+        <a th:href="@{/books/new}"
+           class="button"
+           sec:authorize="hasRole('ADMIN')">
             + Adaugă carte
         </a>
     </div>
@@ -95,7 +101,8 @@
         </div>
 
         <div class="filter-button-group">
-            <button type="submit" class="button filter-button">
+            <button type="submit"
+                    class="button filter-button">
                 Aplică
             </button>
         </div>
@@ -104,6 +111,7 @@
 
     <!-- TABEL -->
     <table>
+
         <thead>
         <tr>
             <th>ID</th>
@@ -112,20 +120,70 @@
             <th>Stoc</th>
             <th>Editură</th>
             <th>ISBN</th>
-            <th>Acțiuni</th>
+
+            <th sec:authorize="hasRole('ADMIN')">
+                Acțiuni
+            </th>
         </tr>
         </thead>
 
         <tbody>
+
         <tr th:each="book : ${books}">
+
             <td th:text="${book.id}"></td>
-            <td th:text="${book.title}"></td>
+            <td>
+                <div class="book-title-hover">
+        <span class="book-title"
+              th:text="${book.title}">
+        </span>
+
+                    <div class="book-details-tooltip"
+                         th:if="${book.bookDetails != null}">
+
+                        <div class="tooltip-header">
+                            Detalii carte
+                        </div>
+
+                        <div class="tooltip-row">
+                            <strong>ISBN:</strong>
+                            <span th:text="${book.bookDetails.isbn}"></span>
+                        </div>
+
+                        <div class="tooltip-row">
+                            <strong>Număr pagini:</strong>
+                            <span th:text="${book.bookDetails.numberOfPages}"></span>
+                        </div>
+
+                        <div class="tooltip-row">
+                            <strong>Limbă:</strong>
+                            <span th:text="${book.bookDetails.language}"></span>
+                        </div>
+
+                        <div class="tooltip-row">
+                            <strong>An publicare:</strong>
+                            <span th:text="${book.bookDetails.publicationYear}"></span>
+                        </div>
+
+                        <div class="tooltip-description">
+                            <strong>Descriere:</strong>
+                            <span th:text="${book.bookDetails.description != null
+                        and !#strings.isEmpty(book.bookDetails.description)
+                        ? book.bookDetails.description
+                        : 'Fără descriere'}">
+                </span>
+                        </div>
+
+                    </div>
+                </div>
+            </td>
             <td th:text="${book.price}"></td>
             <td th:text="${book.stock}"></td>
             <td th:text="${book.publisher.name}"></td>
             <td th:text="${book.bookDetails.isbn}"></td>
 
-            <td>
+            <td sec:authorize="hasRole('ADMIN')">
+
                 <a th:href="@{/books/{id}/edit(id=${book.id})}"
                    class="button">
                     Editează
@@ -142,8 +200,11 @@
                     </button>
 
                 </form>
+
             </td>
+
         </tr>
+
         </tbody>
     </table>
 
@@ -188,7 +249,11 @@
             ← Anterior
         </span>
 
-        <span th:each="pageNumber : ${#numbers.sequence(0, bookPage.totalPages - 1)}">
+        <span th:each="pageNumber :
+                ${#numbers.sequence(
+                    0,
+                    bookPage.totalPages - 1
+                )}">
 
             <a th:if="${pageNumber != currentPage}"
                th:href="@{/books(

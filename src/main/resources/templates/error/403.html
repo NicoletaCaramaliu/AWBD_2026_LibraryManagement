@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>403 - Acces interzis</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+
+    <div class="error-page">
+
+        <h1>403</h1>
+
+        <h2>Acces interzis</h2>
+
+        <p>
+            Nu ai permisiunea necesară pentru a accesa această pagină.
+        </p>
+
+        <a th:href="@{/}" class="button">
+            Înapoi la pagina principală
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

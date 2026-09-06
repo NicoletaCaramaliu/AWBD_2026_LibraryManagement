@@ -82,31 +82,6 @@ public class UserWebController {
         return "users/list";
     }
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
-
-        model.addAttribute("user", new User());
-        model.addAttribute("roles", Role.values());
-
-        return "users/form";
-    }
-
-    @PostMapping
-    public String createUser(
-            @Valid @ModelAttribute("user") User user,
-            BindingResult bindingResult,
-            Model model) {
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("roles", Role.values());
-            return "users/form";
-        }
-
-        userService.create(user);
-
-        return "redirect:/users";
-    }
-
     @GetMapping("/{id}/edit")
     public String showEditForm(
             @PathVariable Long id,
@@ -128,16 +103,9 @@ public class UserWebController {
     @PostMapping("/{id}")
     public String updateUser(
             @PathVariable Long id,
-            @Valid @ModelAttribute("user") User user,
-            BindingResult bindingResult,
-            Model model) {
+            @ModelAttribute("user") User user) {
 
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("roles", Role.values());
-            return "users/form";
-        }
-
-        userService.update(id, user);
+        userService.updateWithoutPassword(id, user);
 
         return "redirect:/users";
     }

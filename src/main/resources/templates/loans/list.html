@@ -1,22 +1,30 @@
 <!DOCTYPE html>
-<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<html lang="ro"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <title>Împrumuturi - Library Management</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
+
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div class="container">
 
     <h1>Împrumuturi</h1>
 
-    <a th:href="@{/loans/new}" class="button">
+    <!-- USER si ADMIN pot crea imprumuturi -->
+    <a th:href="@{/loans/new}"
+       class="button">
         + Adaugă împrumut
     </a>
 
     <table>
+
         <thead>
         <tr>
             <th>ID</th>
@@ -33,6 +41,7 @@
         <tbody>
 
         <tr th:each="loan : ${loans}">
+
             <td th:text="${loan.id}"></td>
 
             <td th:text="${loan.user.username}"></td>
@@ -49,6 +58,7 @@
 
             <td>
 
+                <!-- USER si ADMIN pot returna cartea -->
                 <form th:if="${loan.status.name() != 'RETURNED'}"
                       th:action="@{/loans/{id}/return(id=${loan.id})}"
                       method="post"
@@ -61,10 +71,12 @@
 
                 </form>
 
+                <!-- Doar ADMIN poate sterge imprumutul -->
                 <form th:if="${loan.status.name() == 'RETURNED'}"
                       th:action="@{/loans/{id}/delete(id=${loan.id})}"
                       method="post"
-                      style="display: inline;">
+                      style="display: inline;"
+                      sec:authorize="hasRole('ADMIN')">
 
                     <button type="submit"
                             class="button button-danger"
@@ -74,10 +86,18 @@
 
                 </form>
 
+                <!-- USER vede ca imprumutul este deja returnat -->
+                <span th:if="${loan.status.name() == 'RETURNED'}"
+                      sec:authorize="hasRole('USER')">
+                    Returnat
+                </span>
+
             </td>
+
         </tr>
 
         </tbody>
+
     </table>
 
     <p class="empty-message"

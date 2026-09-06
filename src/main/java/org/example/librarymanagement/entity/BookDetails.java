@@ -36,6 +36,6 @@ public class BookDetails {
     @Column(nullable = false)
     private Integer publicationYear;
 
-    @Column(length = 3000)
+    @Column(columnDefinition = "TEXT")
     private String description;
 }

@@ -4,20 +4,20 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.librarymanagement.entity.Author;
 import org.example.librarymanagement.entity.Book;
+import org.example.librarymanagement.entity.BookDetails;
 import org.example.librarymanagement.entity.Category;
 import org.example.librarymanagement.service.AuthorService;
 import org.example.librarymanagement.service.BookDetailsService;
 import org.example.librarymanagement.service.BookService;
 import org.example.librarymanagement.service.CategoryService;
 import org.example.librarymanagement.service.PublisherService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-
 
 import java.util.HashSet;
 import java.util.Set;
@@ -60,7 +60,6 @@ public class BookWebController {
 
         model.addAttribute("books", bookPage.getContent());
         model.addAttribute("bookPage", bookPage);
-
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", size);
         model.addAttribute("sortBy", sortBy);
@@ -71,8 +70,14 @@ public class BookWebController {
 
     @GetMapping("/new")
     public String showCreateForm(Model model) {
-        model.addAttribute("book", new Book());
+
+        Book book = new Book();
+        book.setBookDetails(new BookDetails());
+
+        model.addAttribute("book", book);
+
         addFormData(model);
+
         return "books/form";
     }
 
@@ -84,39 +89,37 @@ public class BookWebController {
             @RequestParam(required = false) Set<Long> categoryIds,
             Model model) {
 
-        if (authorIds != null) {
-            Set<Author> authors = new HashSet<>();
-            for (Long id : authorIds) {
-                Author author = new Author();
-                author.setId(id);
-                authors.add(author);
-            }
-            book.setAuthors(authors);
-        }
-
-        if (categoryIds != null) {
-            Set<Category> categories = new HashSet<>();
-            for (Long id : categoryIds) {
-                Category category = new Category();
-                category.setId(id);
-                categories.add(category);
-            }
-            book.setCategories(categories);
-        }
+        setAuthors(book, authorIds);
+        setCategories(book, categoryIds);
 
         if (bindingResult.hasErrors()) {
             addFormData(model);
             return "books/form";
         }
 
+        BookDetails savedDetails =
+                bookDetailsService.create(
+                        book.getBookDetails()
+                );
+
+        book.setBookDetails(savedDetails);
+
         bookService.create(book);
+
         return "redirect:/books";
     }
 
     @GetMapping("/{id}/edit")
-    public String showEditForm(@PathVariable Long id, Model model) {
-        model.addAttribute("book", bookService.getById(id));
+    public String showEditForm(
+            @PathVariable Long id,
+            Model model) {
+
+        Book book = bookService.getById(id);
+
+        model.addAttribute("book", book);
+
         addFormData(model);
+
         return "books/form";
     }
 
@@ -129,45 +132,93 @@ public class BookWebController {
             @RequestParam(required = false) Set<Long> categoryIds,
             Model model) {
 
-        if (authorIds != null) {
-            Set<Author> authors = new HashSet<>();
-            for (Long authorId : authorIds) {
-                Author author = new Author();
-                author.setId(authorId);
-                authors.add(author);
-            }
-            book.setAuthors(authors);
-        }
+        Book existingBook = bookService.getById(id);
 
-        if (categoryIds != null) {
-            Set<Category> categories = new HashSet<>();
-            for (Long categoryId : categoryIds) {
-                Category category = new Category();
-                category.setId(categoryId);
-                categories.add(category);
-            }
-            book.setCategories(categories);
-        }
+        setAuthors(book, authorIds);
+        setCategories(book, categoryIds);
 
         if (bindingResult.hasErrors()) {
+            book.setId(id);
             addFormData(model);
             return "books/form";
         }
 
+        BookDetails updatedDetails = book.getBookDetails();
+
+        BookDetails savedDetails =
+                bookDetailsService.update(
+                        existingBook.getBookDetails().getId(),
+                        updatedDetails
+                );
+
+        book.setBookDetails(savedDetails);
+
         bookService.update(id, book);
+
         return "redirect:/books";
     }
 
     @PostMapping("/{id}/delete")
     public String deleteBook(@PathVariable Long id) {
+
         bookService.delete(id);
+
         return "redirect:/books";
     }
 
+    private void setAuthors(
+            Book book,
+            Set<Long> authorIds) {
+
+        Set<Author> authors = new HashSet<>();
+
+        if (authorIds != null) {
+            for (Long authorId : authorIds) {
+
+                Author author = new Author();
+                author.setId(authorId);
+
+                authors.add(author);
+            }
+        }
+
+        book.setAuthors(authors);
+    }
+
+    private void setCategories(
+            Book book,
+            Set<Long> categoryIds) {
+
+        Set<Category> categories = new HashSet<>();
+
+        if (categoryIds != null) {
+            for (Long categoryId : categoryIds) {
+
+                Category category = new Category();
+                category.setId(categoryId);
+
+                categories.add(category);
+            }
+        }
+
+        book.setCategories(categories);
+    }
+
     private void addFormData(Model model) {
-        model.addAttribute("publishers", publisherService.getAll());
-        model.addAttribute("authors", authorService.getAll());
-        model.addAttribute("categories", categoryService.getAll());
-        model.addAttribute("bookDetailsList", bookDetailsService.getAll());
+
+        model.addAttribute(
+                "publishers",
+                publisherService.getAll()
+        );
+
+        model.addAttribute(
+                "authors",
+                authorService.getAll()
+        );
+
+        model.addAttribute(
+                "categories",
+                categoryService.getAll()
+        );
     }
 }

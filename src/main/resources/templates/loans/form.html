@@ -1,44 +1,39 @@
 <!DOCTYPE html>
 <html lang="ro" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Adaugă împrumut - Library Management</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
+
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div class="container">
 
     <h1>Adaugă împrumut</h1>
 
+    <p class="subtitle">
+        Împrumutul va fi asociat automat contului autentificat.
+    </p>
+
     <form th:action="@{/loans}" method="post">
 
         <div class="form-group">
-            <label for="userId">Utilizator</label>
 
-            <select id="userId"
-                    name="userId"
-                    required>
-
-                <option value="">-- Selectează utilizatorul --</option>
-
-                <option th:each="user : ${users}"
-                        th:value="${user.id}"
-                        th:text="${user.username + ' - ' + user.email}">
-                </option>
-
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="bookId">Carte</label>
+            <label for="bookId">
+                Carte
+            </label>
 
             <select id="bookId"
                     name="bookId"
                     required>
 
-                <option value="">-- Selectează cartea --</option>
+                <option value="">
+                    -- Selectează cartea --
+                </option>
 
                 <option th:each="book : ${books}"
                         th:value="${book.id}"
@@ -46,9 +41,11 @@
                 </option>
 
             </select>
+
         </div>
 
-        <button type="submit" class="button">
+        <button type="submit"
+                class="button">
             Creează împrumut
         </button>
 

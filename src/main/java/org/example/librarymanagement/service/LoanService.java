@@ -207,4 +207,15 @@ public class LoanService {
 
         log.info("Loan with id {} was deleted successfully", id);
     }
+
+    @Transactional(readOnly = true)
+    public List<Loan> getAllByUserId(Long userId) {
+
+        log.debug(
+                "Retrieving loans for userId={}",
+                userId
+        );
+
+        return loanRepository.findByUser_Id(userId);
+    }
 }
