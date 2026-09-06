@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${publisher.id == null ? 'Adaugă editură' : 'Editează editură'}">
+        Editură
+    </title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1 th:text="${publisher.id == null ? 'Adaugă editură' : 'Editează editură'}">
+        Editură
+    </h1>
+
+    <form th:if="${publisher.id == null}"
+          th:action="@{/publishers}"
+          th:object="${publisher}"
+          method="post">
+
+        <div class="form-group">
+            <label for="nameCreate">Nume</label>
+            <input type="text"
+                   id="nameCreate"
+                   th:field="*{name}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('name')}"
+               th:errors="*{name}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="countryCreate">Țară</label>
+            <input type="text"
+                   id="countryCreate"
+                   th:field="*{country}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('country')}"
+               th:errors="*{country}">
+            </p>
+        </div>
+
+        <button type="submit" class="button">Salvează</button>
+        <a th:href="@{/publishers}" class="button button-secondary">Anulează</a>
+
+    </form>
+
+    <form th:unless="${publisher.id == null}"
+          th:action="@{/publishers/{id}(id=${publisher.id})}"
+          th:object="${publisher}"
+          method="post">
+
+        <div class="form-group">
+            <label for="nameEdit">Nume</label>
+            <input type="text"
+                   id="nameEdit"
+                   th:field="*{name}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('name')}"
+               th:errors="*{name}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="countryEdit">Țară</label>
+            <input type="text"
+                   id="countryEdit"
+                   th:field="*{country}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('country')}"
+               th:errors="*{country}">
+            </p>
+        </div>
+
+        <button type="submit" class="button">Salvează modificările</button>
+        <a th:href="@{/publishers}" class="button button-secondary">Anulează</a>
+
+    </form>
+
+</div>
+
+</body>
+</html>
