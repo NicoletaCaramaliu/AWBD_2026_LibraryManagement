@@ -1,5 +1,6 @@
 package org.example.librarymanagement.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -40,12 +41,14 @@ public class Book {
     @Column(nullable = false)
     private Integer stock;
 
+    @NotNull(message = "Book details are required")
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "book_details_id", unique = true)
+    @JoinColumn(name = "book_details_id", nullable = false, unique = true)
     private BookDetails bookDetails;
 
+    @NotNull(message = "Publisher is required")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "publisher_id")
+    @JoinColumn(name = "publisher_id", nullable = false)
     private Publisher publisher;
 
     @ManyToMany
@@ -66,6 +69,7 @@ public class Book {
     @Builder.Default
     private Set<Category> categories = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "book")
     @Builder.Default
     private List<Loan> loans = new ArrayList<>();
