@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${user.id == null ? 'Adaugă utilizator' : 'Editează utilizator'}">
+        Utilizator
+    </title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1 th:text="${user.id == null ? 'Adaugă utilizator' : 'Editează utilizator'}">
+        Utilizator
+    </h1>
+
+    <!-- CREATE -->
+    <form th:if="${user.id == null}"
+          th:action="@{/users}"
+          th:object="${user}"
+          method="post">
+
+        <div class="form-group">
+            <label for="usernameCreate">Username</label>
+            <input type="text"
+                   id="usernameCreate"
+                   th:field="*{username}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('username')}"
+               th:errors="*{username}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="emailCreate">Email</label>
+            <input type="email"
+                   id="emailCreate"
+                   th:field="*{email}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('email')}"
+               th:errors="*{email}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="passwordCreate">Parolă</label>
+            <input type="password"
+                   id="passwordCreate"
+                   th:field="*{password}"
+                   required>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('password')}"
+               th:errors="*{password}">
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="roleCreate">Rol</label>
+            <select id="roleCreate"
+                    th:field="*{role}"
+                    required>
+                <option value="">-- Selectează rolul --</option>
+                <option th:each="role : ${roles}"
+                        th:value="${role}"
+                        th:text="${role}">
+                </option>
+            </select>
+
+            <p class="error-message"
+               th:if="${#fields.hasErrors('role')}"
+               th:errors="*{role}">
+            </p>
+        </div>
+
+        <button type="submit" class="button">Salvează</button>
+        <a th:href="@{/users}" class="button button-secondary">Anulează</a>
+
+    </form>
+
+    <!-- EDIT -->
+    <form th:unless="${user.id == null}"
+          th:action="@{/users/{id}(id=${user.id})}"
+          th:object="${user}"
+          method="post">
+
+        <div class="form-group">
+            <label for="usernameEdit">Username</label>
+            <input type="text"
+                   id="usernameEdit"
+                   th:field="*{username}"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="emailEdit">Email</label>
+            <input type="email"
+                   id="emailEdit"
+                   th:field="*{email}"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="passwordEdit">Parolă</label>
+            <input type="password"
+                   id="passwordEdit"
+                   th:field="*{password}"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="roleEdit">Rol</label>
+            <select id="roleEdit"
+                    th:field="*{role}"
+                    required>
+                <option value="">-- Selectează rolul --</option>
+                <option th:each="role : ${roles}"
+                        th:value="${role}"
+                        th:text="${role}">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit" class="button">Salvează modificările</button>
+        <a th:href="@{/users}" class="button button-secondary">Anulează</a>
+
+    </form>
+
+</div>
+
+</body>
+</html>
