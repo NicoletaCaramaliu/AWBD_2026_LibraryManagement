@@ -10,4 +10,9 @@ public class HomeController {
     public String home() {
         return "home";
     }
+
+    @GetMapping("/test-500")
+    public String test500() {
+        throw new RuntimeException("Test error");
+    }
 }

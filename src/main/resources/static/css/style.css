@@ -429,3 +429,36 @@ tr:hover {
 body:not(.home-body) .navbar {
     margin-bottom: 25px;
 }
+
+/* ERROR PAGES */
+
+.error-page {
+    max-width: 700px;
+    margin: 100px auto;
+    padding: 60px 40px;
+    text-align: center;
+    border-radius: 22px;
+    background: rgba(45, 55, 72, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.error-code {
+    font-size: 90px;
+    line-height: 1;
+    font-weight: 800;
+    color: #8b5cf6;
+    margin-bottom: 20px;
+}
+
+.error-page h1 {
+    margin-bottom: 15px;
+    font-size: 32px;
+}
+
+.error-page p {
+    margin-bottom: 30px;
+    color: #cbd5e1;
+    font-size: 17px;
+    line-height: 1.6;
+}
