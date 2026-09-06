@@ -14,6 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,8 +34,38 @@ public class BookWebController {
     private final BookDetailsService bookDetailsService;
 
     @GetMapping
-    public String listBooks(Model model) {
-        model.addAttribute("books", bookService.getAll());
+    public String listBooks(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "title") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction,
+            Model model) {
+
+        if (!sortBy.equals("title") && !sortBy.equals("price")) {
+            sortBy = "title";
+        }
+
+        Sort.Direction sortDirection =
+                direction.equalsIgnoreCase("desc")
+                        ? Sort.Direction.DESC
+                        : Sort.Direction.ASC;
+
+        PageRequest pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(sortDirection, sortBy)
+        );
+
+        Page<Book> bookPage = bookService.getAll(pageable);
+
+        model.addAttribute("books", bookPage.getContent());
+        model.addAttribute("bookPage", bookPage);
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", size);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("direction", direction);
+
         return "books/list";
     }
 
