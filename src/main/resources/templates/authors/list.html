@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Autori - Library Management</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Autori</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Prenume</th>
+            <th>Nume</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="author : ${authors}">
+            <td th:text="${author.id}"></td>
+            <td th:text="${author.firstName}"></td>
+            <td th:text="${author.lastName}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p class="empty-message" th:if="${#lists.isEmpty(authors)}">
+        Nu există autori înregistrați.
+    </p>
+
+</div>
+
+</body>
+</html>
