@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${book.id == null ? 'Adaugă carte' : 'Editează carte'}">
+        Carte
+    </title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1 th:text="${book.id == null ? 'Adaugă carte' : 'Editează carte'}">
+        Carte
+    </h1>
+
+    <!-- CREATE -->
+    <form th:if="${book.id == null}"
+          th:action="@{/books}"
+          th:object="${book}"
+          method="post">
+
+        <div class="form-group">
+            <label for="titleCreate">Titlu</label>
+            <input type="text"
+                   id="titleCreate"
+                   th:field="*{title}"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="priceCreate">Preț</label>
+            <input type="number"
+                   id="priceCreate"
+                   th:field="*{price}"
+                   min="0"
+                   step="0.01"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="stockCreate">Stoc</label>
+            <input type="number"
+                   id="stockCreate"
+                   th:field="*{stock}"
+                   min="0"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="publisherCreate">Editură</label>
+            <select id="publisherCreate"
+                    th:field="*{publisher.id}"
+                    required>
+                <option value="">-- Selectează editura --</option>
+                <option th:each="publisher : ${publishers}"
+                        th:value="${publisher.id}"
+                        th:text="${publisher.name}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="bookDetailsCreate">Detalii carte</label>
+            <select id="bookDetailsCreate"
+                    th:field="*{bookDetails.id}"
+                    required>
+                <option value="">-- Selectează detaliile --</option>
+                <option th:each="details : ${bookDetailsList}"
+                        th:value="${details.id}"
+                        th:text="${details.isbn}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="authorIdsCreate">Autori</label>
+            <select id="authorIdsCreate"
+                    name="authorIds"
+                    multiple>
+                <option th:each="author : ${authors}"
+                        th:value="${author.id}"
+                        th:text="${author.firstName + ' ' + author.lastName}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="categoryIdsCreate">Categorii</label>
+            <select id="categoryIdsCreate"
+                    name="categoryIds"
+                    multiple>
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit" class="button">Salvează</button>
+        <a th:href="@{/books}" class="button button-secondary">Anulează</a>
+
+    </form>
+
+    <!-- EDIT -->
+    <form th:unless="${book.id == null}"
+          th:action="@{/books/{id}(id=${book.id})}"
+          th:object="${book}"
+          method="post">
+
+        <div class="form-group">
+            <label for="titleEdit">Titlu</label>
+            <input type="text"
+                   id="titleEdit"
+                   th:field="*{title}"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="priceEdit">Preț</label>
+            <input type="number"
+                   id="priceEdit"
+                   th:field="*{price}"
+                   min="0"
+                   step="0.01"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="stockEdit">Stoc</label>
+            <input type="number"
+                   id="stockEdit"
+                   th:field="*{stock}"
+                   min="0"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="publisherEdit">Editură</label>
+            <select id="publisherEdit"
+                    th:field="*{publisher.id}"
+                    required>
+                <option value="">-- Selectează editura --</option>
+                <option th:each="publisher : ${publishers}"
+                        th:value="${publisher.id}"
+                        th:text="${publisher.name}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="bookDetailsEdit">Detalii carte</label>
+            <select id="bookDetailsEdit"
+                    th:field="*{bookDetails.id}"
+                    required>
+                <option value="">-- Selectează detaliile --</option>
+                <option th:each="details : ${bookDetailsList}"
+                        th:value="${details.id}"
+                        th:text="${details.isbn}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="authorIdsEdit">Autori</label>
+            <select id="authorIdsEdit"
+                    name="authorIds"
+                    multiple>
+                <option th:each="author : ${authors}"
+                        th:value="${author.id}"
+                        th:text="${author.firstName + ' ' + author.lastName}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="categoryIdsEdit">Categorii</label>
+            <select id="categoryIdsEdit"
+                    name="categoryIds"
+                    multiple>
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit" class="button">Salvează modificările</button>
+        <a th:href="@{/books}" class="button button-secondary">Anulează</a>
+
+    </form>
+
+</div>
+
+</body>
+</html>
