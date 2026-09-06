@@ -7,10 +7,11 @@ import org.example.librarymanagement.exception.DuplicateResourceException;
 import org.example.librarymanagement.exception.InvalidOperationException;
 import org.example.librarymanagement.exception.ResourceNotFoundException;
 import org.example.librarymanagement.repository.UserRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public User create(User user) {
 
@@ -58,6 +60,10 @@ public class UserService {
                                     "' already exists"
                     );
                 });
+
+        user.setPassword(
+                passwordEncoder.encode(user.getPassword())
+        );
 
         User savedUser = userRepository.save(user);
 
@@ -148,7 +154,11 @@ public class UserService {
 
         existing.setUsername(updatedUser.getUsername());
         existing.setEmail(updatedUser.getEmail());
-        existing.setPassword(updatedUser.getPassword());
+
+        existing.setPassword(
+                passwordEncoder.encode(updatedUser.getPassword())
+        );
+
         existing.setRole(updatedUser.getRole());
 
         User savedUser = userRepository.save(existing);

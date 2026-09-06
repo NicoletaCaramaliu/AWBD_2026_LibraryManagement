@@ -9,7 +9,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 @Table(name = "users")
 @Getter
@@ -34,6 +34,7 @@ public class User {
 
     @NotBlank(message = "Password is required")
     @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @NotNull(message = "Role is required")
