@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile({"dev","prodgit pul"})
+@Profile({"dev","prod"})
 @RequiredArgsConstructor
 @Slf4j
 public class AdminInitializer implements CommandLineRunner {
