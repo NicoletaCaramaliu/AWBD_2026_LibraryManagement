@@ -29,7 +29,6 @@ Proiectul a fost dezvoltat în cadrul cursului Advanced Web-Based Development.
 - [Instrucțiuni de configurare](#setup-instructions)
 - [Rularea aplicației](#running-the-application)
 - [Rularea testelor](#running-tests)
-- [Capturi de ecran ale aplicației](#application-screenshots)
 - [Deploy](#deployment)
 - [Flux de lucru Git](#git-workflow)
 - [Structura proiectului](#project-structure)
